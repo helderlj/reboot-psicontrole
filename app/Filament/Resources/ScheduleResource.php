@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\Schedule;
-use Filament\{Forms\Components\TimePicker, Tables, Forms};
+use Filament\{Forms\Components\TimePicker, Forms\Components\ViewField, Tables, Forms};
 use Filament\Resources\{Form, Table, Resource};
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -133,8 +133,8 @@ class ScheduleResource extends Resource
     public static function getRelations(): array
     {
         return [
+            ScheduleResource\RelationManagers\AppointmentsRelationManager::class,
             ScheduleResource\RelationManagers\ScheduleUnavailabilitiesRelationManager::class,
-            ScheduleResource\RelationManagers\AppointmentsRelationManager::class
         ];
     }
 

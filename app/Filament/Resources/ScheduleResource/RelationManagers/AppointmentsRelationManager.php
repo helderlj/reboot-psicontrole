@@ -5,7 +5,9 @@ namespace App\Filament\Resources\ScheduleResource\RelationManagers;
 use App\Models\Service;
 use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\ViewField;
 use Filament\Tables;
 use Filament\Resources\{Form, Table};
 use Filament\Forms\Components\Grid;
@@ -43,17 +45,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'lg' => 6,
                     ]),
 
-                TimePicker::make('end_time')
-                    ->rules(['required', 'date_format:H:i'])
-                    ->withoutSeconds()
-                    ->placeholder('End Time')
-                    ->disabled()
-                    ->reactive()
-                    ->columnSpan([
-                        'default' => 6,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+                Hidden::make('end_time'),
 
 
                 BelongsToSelect::make('user_id')
@@ -93,6 +85,9 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'md' => 12,
                         'lg' => 12,
                     ]),
+
+                ViewField::make('Meu Input')
+                    ->view('forms.components.availability-slot-picker')
             ]),
         ]);
     }
