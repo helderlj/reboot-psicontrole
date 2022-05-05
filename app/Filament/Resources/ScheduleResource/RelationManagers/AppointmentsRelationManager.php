@@ -2,14 +2,13 @@
 
 namespace App\Filament\Resources\ScheduleResource\RelationManagers;
 
+use App\Models\Service;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TimePicker;
 use Filament\Tables;
 use Filament\Resources\{Form, Table};
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\BelongsToSelect;
 use Filament\Tables\Filters\MultiSelectFilter;
@@ -33,23 +32,27 @@ class AppointmentsRelationManager extends HasManyRelationManager
         return $form->schema([
             Grid::make(['default' => 0])->schema([
                 TimePicker::make('start_time')
-                    ->rules(['required', 'date_format:H:i:s'])
+                    ->rules(['required', 'date_format:H:i'])
                     ->withoutSeconds()
+                    ->default(fn($livewire) => $livewire->ownerRecord->start_time)
                     ->placeholder('Start Time')
+                    ->reactive()
                     ->columnSpan([
-                        'default' => 3,
-                        'md' => 3,
-                        'lg' => 3,
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
                     ]),
 
                 TimePicker::make('end_time')
-                    ->rules(['required', 'date_format:H:i:s'])
+                    ->rules(['required', 'date_format:H:i'])
                     ->withoutSeconds()
                     ->placeholder('End Time')
+                    ->disabled()
+                    ->reactive()
                     ->columnSpan([
-                        'default' => 3,
-                        'md' => 3,
-                        'lg' => 3,
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
                     ]),
 
 
@@ -57,8 +60,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                     ->rules(['required', 'exists:users,id'])
                     ->relationship('user', 'name')
                     ->default(Auth::id())
-                    ->disabled(! auth()->user()->isSuperAdmin())
-//                    ->searchable()
+                    ->disabled(!auth()->user()->isSuperAdmin())
                     ->placeholder('User')
                     ->columnSpan([
                         'default' => 12,
@@ -69,7 +71,6 @@ class AppointmentsRelationManager extends HasManyRelationManager
                 BelongsToSelect::make('patient_id')
                     ->rules(['required', 'exists:patients,id'])
                     ->relationship('patient', 'name')
-//                    ->searchable()
                     ->placeholder('Patient')
                     ->columnSpan([
                         'default' => 12,
@@ -80,8 +81,13 @@ class AppointmentsRelationManager extends HasManyRelationManager
                 BelongsToSelect::make('service_id')
                     ->rules(['required', 'exists:services,id'])
                     ->relationship('service', 'name')
-//                    ->searchable()
                     ->placeholder('Service')
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                        $serviceDuration = Service::find($state)->duration;
+                        $inicio = $get('start_time');
+                        $set('end_time', ((Carbon::createFromTimestamp($inicio))->addMinute($serviceDuration))->format('h:i') );
+                    })
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
@@ -95,15 +101,11 @@ class AppointmentsRelationManager extends HasManyRelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('start_time'),
-                Tables\Columns\TextColumn::make('end_time'),
-                Tables\Columns\TextColumn::make('uuid')->limit(50),
-                Tables\Columns\TextColumn::make('token')->limit(50),
-                Tables\Columns\TextColumn::make('cancelled_at')->date(),
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
-                Tables\Columns\TextColumn::make('patient.name')->limit(50),
-                Tables\Columns\TextColumn::make('schedule.date')->limit(50),
-                Tables\Columns\TextColumn::make('service.name')->limit(50),
+                Tables\Columns\TextColumn::make('start_time')->date('H:i')->label('Hora Inicio'),
+                Tables\Columns\TextColumn::make('end_time')->date('H:i')->label('Hora Fim'),
+                Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Terapeuta'),
+                Tables\Columns\TextColumn::make('patient.name')->limit(50)->label('Paciente'),
+                Tables\Columns\TextColumn::make('service.name')->limit(50)->label('Serviço Agendado'),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -117,7 +119,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                                 $data['created_from'],
                                 fn(
                                     Builder $query,
-                                    $date
+                                            $date
                                 ): Builder => $query->whereDate(
                                     'created_at',
                                     '>=',
@@ -128,7 +130,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                                 $data['created_until'],
                                 fn(
                                     Builder $query,
-                                    $date
+                                            $date
                                 ): Builder => $query->whereDate(
                                     'created_at',
                                     '<=',

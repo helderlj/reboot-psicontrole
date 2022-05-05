@@ -104,7 +104,7 @@ class PatientResource extends Resource
 
                 RichEditor::make('summary')
                     ->label('Sumário')
-                    ->rules(['nullable', 'max:255', 'string'])
+                    ->rules(['nullable', 'max:2048'])
                     ->placeholder('Summary')
                     ->columnSpan([
                         'default' => 12,
