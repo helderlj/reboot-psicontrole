@@ -35,7 +35,7 @@ class ServiceSeeder extends Seeder
             'duration' => '60'
         ]);
         Service::create([
-            'name' => 'Reposição I',
+            'name' => 'Reposição II',
             'duration' => '90'
         ]);
     }
