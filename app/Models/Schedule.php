@@ -18,7 +18,9 @@ class Schedule extends Model
     protected $searchableFields = ['*'];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
     ];
 
     public function user()

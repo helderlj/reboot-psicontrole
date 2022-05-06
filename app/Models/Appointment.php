@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Tenancy\BelongsToTenant;
 use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
@@ -29,7 +30,10 @@ class Appointment extends Model
     protected $searchableFields = ['*'];
 
     protected $casts = [
-        'cancelled_at' => 'datetime',
+        'date' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'cancelled_at' => 'datetime'
     ];
 
     protected static function boot()
@@ -40,6 +44,16 @@ class Appointment extends Model
             $appointment->uuid = (string) Str::uuid();
             $appointment->token = (string) Str::random(25);
         });
+    }
+
+    public function scopeNotCancelled(Builder $builder)
+    {
+        $builder->whereNull('cancelled_at');
+    }
+
+    public function isCancelled()
+    {
+        return !is_null($this->cancelled_at);
     }
 
     public function user()

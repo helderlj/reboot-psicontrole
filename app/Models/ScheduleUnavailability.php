@@ -17,6 +17,11 @@ class ScheduleUnavailability extends Model
 
     protected $table = 'schedule_unavailabilities';
 
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     public function schedule()
     {
         return $this->belongsTo(Schedule::class);

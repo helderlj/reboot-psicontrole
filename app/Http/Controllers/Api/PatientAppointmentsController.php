@@ -45,7 +45,6 @@ class PatientAppointmentsController extends Controller
             'uuid' => ['required', 'max:255'],
             'token' => ['required', 'max:255', 'string'],
             'cancelled_at' => ['nullable', 'date'],
-            'user_id' => ['required', 'exists:users,id'],
             'schedule_id' => ['required', 'exists:schedules,id'],
             'service_id' => ['required', 'exists:services,id'],
         ]);

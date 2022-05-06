@@ -73,17 +73,6 @@ class AppointmentResource extends Resource
                         'lg' => 12,
                     ]),
 
-                BelongsToSelect::make('user_id')
-                    ->rules(['required', 'exists:users,id'])
-                    ->relationship('user', 'name')
-                    ->searchable()
-                    ->placeholder('User')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-
                 BelongsToSelect::make('patient_id')
                     ->rules(['required', 'exists:patients,id'])
                     ->relationship('patient', 'name')
@@ -129,7 +118,6 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('uuid')->limit(50),
                 Tables\Columns\TextColumn::make('token')->limit(50),
                 Tables\Columns\TextColumn::make('cancelled_at')->date(),
-                Tables\Columns\TextColumn::make('user.name')->limit(50),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50),
                 Tables\Columns\TextColumn::make('schedule.date')->limit(50),
                 Tables\Columns\TextColumn::make('service.name')->limit(50),
@@ -165,11 +153,6 @@ class AppointmentResource extends Resource
                                 )
                             );
                     }),
-
-                MultiSelectFilter::make('user_id')->relationship(
-                    'user',
-                    'name'
-                ),
 
                 MultiSelectFilter::make('patient_id')->relationship(
                     'patient',

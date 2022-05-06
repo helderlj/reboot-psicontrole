@@ -46,11 +46,6 @@ class User extends Authenticatable
         return $this->hasMany(Patient::class);
     }
 
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
-    }
-
     public function services()
     {
         return $this->belongsToMany(Service::class);

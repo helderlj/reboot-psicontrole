@@ -56,9 +56,10 @@ class ScheduleResource extends Resource
 
                 TimePicker::make('start_time')
                     ->label('Inicio')
-                    ->rules(['required', 'date_format:H:i', 'before:end_time'])
+                    ->rules(['required', 'date_format:H:i'])
                     ->placeholder('Start Time')
                     ->withoutSeconds()
+                    ->format('H:i')
                     ->default('08:00')
                     ->columnSpan([
                         'default' => 4,
@@ -68,7 +69,7 @@ class ScheduleResource extends Resource
 
                 TimePicker::make('end_time')
                     ->label('Fim')
-                    ->rules(['required', 'date_format:H:i', 'after:start_time'])
+                    ->rules(['required', 'date_format:H:i'])
                     ->placeholder('End Time')
                     ->withoutSeconds()
                     ->default('18:00')

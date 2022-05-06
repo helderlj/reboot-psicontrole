@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->uuid('uuid');
             $table->string('token');
             $table->timestamp('cancelled_at')->nullable();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('service_id');

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ScheduleResource\RelationManagers;
 
+use App\Forms\Components\AvailabilitySlotPicker;
 use App\Models\Service;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -33,17 +34,19 @@ class AppointmentsRelationManager extends HasManyRelationManager
     {
         return $form->schema([
             Grid::make(['default' => 0])->schema([
-                TimePicker::make('start_time')
-                    ->rules(['required', 'date_format:H:i'])
-                    ->withoutSeconds()
-                    ->default(fn($livewire) => $livewire->ownerRecord->start_time)
-                    ->placeholder('Start Time')
-                    ->reactive()
-                    ->columnSpan([
-                        'default' => 6,
-                        'md' => 6,
-                        'lg' => 6,
-                    ]),
+
+
+//                TimePicker::make('start_time')
+//                    ->rules(['required', 'date_format:H:i'])
+//                    ->withoutSeconds()
+//                    ->default(fn($livewire) => $livewire->ownerRecord->start_time)
+//                    ->placeholder('Start Time')
+//                    ->reactive()
+//                    ->columnSpan([
+//                        'default' => 6,
+//                        'md' => 6,
+//                        'lg' => 6,
+//                    ]),
 
                 Hidden::make('end_time'),
 
@@ -79,6 +82,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         $serviceDuration = Service::find($state)->duration;
                         $inicio = $get('start_time');
                         $set('end_time', ((Carbon::createFromTimestamp($inicio))->addMinute($serviceDuration))->format('h:i') );
+                        $set('selected_service_id', $state);
                     })
                     ->columnSpan([
                         'default' => 12,
@@ -86,8 +90,21 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'lg' => 12,
                     ]),
 
-                ViewField::make('Meu Input')
+                Hidden::make('selected_service_id'),
+
+                AvailabilitySlotPicker::make('myInput')
                     ->view('forms.components.availability-slot-picker')
+                    ->boot()
+                    ->reactive()
+                    ->label('Horarios Disponiveis')
+                    ->serviceId(fn(callable $get) => $get('service_id'))
+                    ->scheduleId(fn($livewire): string => $livewire->ownerRecord->id)
+                    ->userId(fn($livewire): string => $livewire->ownerRecord->user_id)
+
+//                    ->afterStateUpdated()
+                    ,
+
+
             ]),
         ]);
     }
@@ -101,6 +118,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
                 Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Terapeuta'),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50)->label('Paciente'),
                 Tables\Columns\TextColumn::make('service.name')->limit(50)->label('Serviço Agendado'),
+                Tables\Columns\TextColumn::make('service.duration')->limit(50)->label('Duração (minutos)'),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
