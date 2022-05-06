@@ -105,6 +105,26 @@ class AppointmentResource extends Resource
                         'md' => 12,
                         'lg' => 12,
                     ]),
+
+                BelongsToSelect::make('user_id')
+                    ->rules(['required', 'exists:users,id'])
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->placeholder('User')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
+
+                DatePicker::make('date')
+                    ->rules(['required', 'date'])
+                    ->placeholder('Date')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
             ]),
         ]);
     }
@@ -121,6 +141,8 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('patient.name')->limit(50),
                 Tables\Columns\TextColumn::make('schedule.date')->limit(50),
                 Tables\Columns\TextColumn::make('service.name')->limit(50),
+                Tables\Columns\TextColumn::make('user.name')->limit(50),
+                Tables\Columns\TextColumn::make('date')->date(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -166,6 +188,11 @@ class AppointmentResource extends Resource
 
                 MultiSelectFilter::make('service_id')->relationship(
                     'service',
+                    'name'
+                ),
+
+                MultiSelectFilter::make('user_id')->relationship(
+                    'user',
                     'name'
                 ),
             ]);

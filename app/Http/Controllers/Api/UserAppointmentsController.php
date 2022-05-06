@@ -48,6 +48,7 @@ class UserAppointmentsController extends Controller
             'patient_id' => ['required', 'exists:patients,id'],
             'schedule_id' => ['required', 'exists:schedules,id'],
             'service_id' => ['required', 'exists:services,id'],
+            'date' => ['required', 'date'],
         ]);
 
         $appointment = $user->appointments()->create($validated);

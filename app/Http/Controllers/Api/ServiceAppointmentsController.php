@@ -47,6 +47,8 @@ class ServiceAppointmentsController extends Controller
             'cancelled_at' => ['nullable', 'date'],
             'patient_id' => ['required', 'exists:patients,id'],
             'schedule_id' => ['required', 'exists:schedules,id'],
+            'user_id' => ['required', 'exists:users,id'],
+            'date' => ['required', 'date'],
         ]);
 
         $appointment = $service->appointments()->create($validated);

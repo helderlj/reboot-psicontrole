@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ServiceUsersController;
 use App\Http\Controllers\Api\UserPatientsController;
 use App\Http\Controllers\Api\UserServicesController;
 use App\Http\Controllers\Api\UserSchedulesController;
+use App\Http\Controllers\Api\UserAppointmentsController;
 use App\Http\Controllers\Api\ServiceAppointmentsController;
 use App\Http\Controllers\Api\PatientAppointmentsController;
 use App\Http\Controllers\Api\ScheduleAppointmentsController;
@@ -107,6 +108,16 @@ Route::name('api.')
             UserPatientsController::class,
             'store',
         ])->name('users.patients.store');
+
+        // User Appointments
+        Route::get('/users/{user}/appointments', [
+            UserAppointmentsController::class,
+            'index',
+        ])->name('users.appointments.index');
+        Route::post('/users/{user}/appointments', [
+            UserAppointmentsController::class,
+            'store',
+        ])->name('users.appointments.store');
 
         // User Services
         Route::get('/users/{user}/services', [

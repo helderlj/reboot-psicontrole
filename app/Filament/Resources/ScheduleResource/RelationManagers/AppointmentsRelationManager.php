@@ -35,64 +35,41 @@ class AppointmentsRelationManager extends HasManyRelationManager
         return $form->schema([
             Grid::make(['default' => 0])->schema([
 
-
-//                TimePicker::make('start_time')
-//                    ->rules(['required', 'date_format:H:i'])
-//                    ->withoutSeconds()
-//                    ->default(fn($livewire) => $livewire->ownerRecord->start_time)
-//                    ->placeholder('Start Time')
-//                    ->reactive()
-//                    ->columnSpan([
-//                        'default' => 6,
-//                        'md' => 6,
-//                        'lg' => 6,
-//                    ]),
+                BelongsToSelect::make('service_id')
+                    ->label('Serviço')
+                    ->rules(['required', 'exists:services,id'])
+                    ->relationship('service', 'name')
+                    ->placeholder('Selecione')
+                    ->reactive()
+//                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+//                        $serviceDuration = Service::find($state)->duration;
+//                        $inicio = $get('start_time');
+//                        $set('end_time', ((Carbon::createFromTimestamp($inicio))->addMinute($serviceDuration))->format('h:i') );
+//                        $set('selected_service_id', $state);
+//                    })
+                    ->columnSpan([
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
 
                 Hidden::make('end_time'),
 
 
-                BelongsToSelect::make('user_id')
-                    ->rules(['required', 'exists:users,id'])
-                    ->relationship('user', 'name')
-                    ->default(Auth::id())
-                    ->disabled(!auth()->user()->isSuperAdmin())
-                    ->placeholder('User')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-
                 BelongsToSelect::make('patient_id')
+                    ->label('Paciente')
                     ->rules(['required', 'exists:patients,id'])
                     ->relationship('patient', 'name')
-                    ->placeholder('Patient')
+                    ->placeholder('Selecione')
                     ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
-
-                BelongsToSelect::make('service_id')
-                    ->rules(['required', 'exists:services,id'])
-                    ->relationship('service', 'name')
-                    ->placeholder('Service')
-                    ->reactive()
-                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                        $serviceDuration = Service::find($state)->duration;
-                        $inicio = $get('start_time');
-                        $set('end_time', ((Carbon::createFromTimestamp($inicio))->addMinute($serviceDuration))->format('h:i') );
-                        $set('selected_service_id', $state);
-                    })
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
                     ]),
 
                 Hidden::make('selected_service_id'),
 
-                AvailabilitySlotPicker::make('myInput')
+                AvailabilitySlotPicker::make('start_time')
                     ->view('forms.components.availability-slot-picker')
                     ->boot()
                     ->reactive()
@@ -100,10 +77,11 @@ class AppointmentsRelationManager extends HasManyRelationManager
                     ->serviceId(fn(callable $get) => $get('service_id'))
                     ->scheduleId(fn($livewire): string => $livewire->ownerRecord->id)
                     ->userId(fn($livewire): string => $livewire->ownerRecord->user_id)
-
-//                    ->afterStateUpdated()
-                    ,
-
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
 
             ]),
         ]);

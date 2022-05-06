@@ -47,6 +47,8 @@ class PatientAppointmentsController extends Controller
             'cancelled_at' => ['nullable', 'date'],
             'schedule_id' => ['required', 'exists:schedules,id'],
             'service_id' => ['required', 'exists:services,id'],
+            'user_id' => ['required', 'exists:users,id'],
+            'date' => ['required', 'date'],
         ]);
 
         $appointment = $patient->appointments()->create($validated);

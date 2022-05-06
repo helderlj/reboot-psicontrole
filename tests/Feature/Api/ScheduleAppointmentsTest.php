@@ -70,6 +70,8 @@ class ScheduleAppointmentsTest extends TestCase
         unset($data['patient_id']);
         unset($data['schedule_id']);
         unset($data['service_id']);
+        unset($data['user_id']);
+        unset($data['date']);
 
         $this->assertDatabaseHas('appointments', $data);
 

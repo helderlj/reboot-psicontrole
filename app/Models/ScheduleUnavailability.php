@@ -18,8 +18,8 @@ class ScheduleUnavailability extends Model
     protected $table = 'schedule_unavailabilities';
 
     protected $casts = [
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
     ];
 
     public function schedule()

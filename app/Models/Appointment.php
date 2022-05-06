@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Tenancy\BelongsToTenant;
 use App\Models\Scopes\Searchable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ class Appointment extends Model
     protected $fillable = [
         'start_time',
         'end_time',
+        'date',
         'uuid',
         'token',
         'cancelled_at',
@@ -31,8 +33,8 @@ class Appointment extends Model
 
     protected $casts = [
         'date' => 'datetime',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i',
         'cancelled_at' => 'datetime'
     ];
 
@@ -43,6 +45,11 @@ class Appointment extends Model
         static::creating(function ($appointment) {
             $appointment->uuid = (string) Str::uuid();
             $appointment->token = (string) Str::random(25);
+            $appointment->start_time = $appointment->start_time->toTimeString();
+            $appointment->end_time = $appointment->start_time->clone()->addMinutes(
+                Service::find($appointment->service_id)->duration
+            )->toTimeString();
+            $appointment->date = Schedule::find($appointment->schedule_id)->date;
         });
     }
 

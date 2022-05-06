@@ -33,6 +33,13 @@ return new class extends Migration {
                 ->on('services')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
+
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('CASCADE')
+                ->onDelete('CASCADE');
         });
     }
 
@@ -47,6 +54,7 @@ return new class extends Migration {
             $table->dropForeign(['patient_id']);
             $table->dropForeign(['schedule_id']);
             $table->dropForeign(['service_id']);
+            $table->dropForeign(['user_id']);
         });
     }
 };

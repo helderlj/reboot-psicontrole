@@ -66,10 +66,11 @@ class UserAppointmentsTest extends TestCase
         unset($data['uuid']);
         unset($data['token']);
         unset($data['cancelled_at']);
-        unset($data['user_id']);
         unset($data['patient_id']);
         unset($data['schedule_id']);
         unset($data['service_id']);
+        unset($data['user_id']);
+        unset($data['date']);
 
         $this->assertDatabaseHas('appointments', $data);
 

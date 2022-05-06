@@ -14,8 +14,7 @@ class AvailabilitySlotPicker extends Field
     protected string $view = 'forms.components.availability-slot-picker';
 
     public $calendarStartDate;
-    public $date;
-    public $time;
+    public $selectedTime;
     public string | Closure $service_id = "-1";
     public string | Closure $schedule_id = "-1";
     public string | Closure $user_id = "-1";
@@ -75,4 +74,17 @@ class AvailabilitySlotPicker extends Field
     {
         return $this->evaluate($this->user_id);
     }
+
+    public function setSelectedTime($time)
+    {
+        $this->selectedTime = $time;
+    }
+
+    public function getSelectedTime()
+    {
+        return $this->selectedTime;
+    }
+
+
+
 }

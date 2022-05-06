@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('user_id');
+            $table->date('date');
 
             $table->timestamps();
         });
