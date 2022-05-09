@@ -62,6 +62,9 @@ class PatientControllerTest extends TestCase
 
         $response = $this->post(route('patients.store'), $data);
 
+        unset($data['fee']);
+        unset($data['frequency']);
+
         $this->assertDatabaseHas('patients', $data);
 
         $patient = Patient::latest('id')->first();
@@ -117,10 +120,18 @@ class PatientControllerTest extends TestCase
             'starting_date' => $this->faker->date,
             'is_active' => $this->faker->boolean,
             'summary' => $this->faker->text,
+            'fee' => $this->faker->randomNumber(0),
+            'frequency' => array_rand(
+                array_flip(['semanal', 'quinzenal', 'mensal']),
+                1
+            ),
             'user_id' => $user->id,
         ];
 
         $response = $this->put(route('patients.update', $patient), $data);
+
+        unset($data['fee']);
+        unset($data['frequency']);
 
         $data['id'] = $patient->id;
 

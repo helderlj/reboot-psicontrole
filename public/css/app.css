@@ -3674,10 +3674,6 @@ select{
 .bg-white\/20{
   background-color: rgb(255 255 255 / 0.2);
 }
-.bg-blue-200{
-  --tw-bg-opacity: 1;
-  background-color: rgb(191 219 254 / var(--tw-bg-opacity));
-}
 .bg-violet-200{
   --tw-bg-opacity: 1;
   background-color: rgb(221 214 254 / var(--tw-bg-opacity));

@@ -22,6 +22,7 @@ class Appointment extends Model
         'date',
         'uuid',
         'token',
+        'status',
         'cancelled_at',
         'user_id',
         'patient_id',

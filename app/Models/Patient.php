@@ -22,6 +22,8 @@ class Patient extends Model
         'starting_date',
         'is_active',
         'summary',
+        'fee',
+        'frequency',
         'user_id',
     ];
 

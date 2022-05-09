@@ -20,7 +20,7 @@ class AppointmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $recordTitleAttribute = 'token';
+    protected static ?string $recordTitleAttribute = 'date';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -46,6 +46,15 @@ class AppointmentResource extends Resource
                         'lg' => 12,
                     ]),
 
+                DatePicker::make('date')
+                    ->rules(['required', 'date'])
+                    ->placeholder('Date')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
+
                 TextInput::make('uuid')
                     ->rules(['required', 'max:255'])
                     ->placeholder('Uuid')
@@ -58,6 +67,25 @@ class AppointmentResource extends Resource
                 TextInput::make('token')
                     ->rules(['required', 'max:255', 'string'])
                     ->placeholder('Token')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
+
+                Select::make('status')
+                    ->rules([
+                        'required',
+                        'in:agendada,realizada paga,realizada não paga,cancelada',
+                    ])
+                    ->searchable()
+                    ->options([
+                        'Agendada' => 'Agendada',
+                        'Realizada Paga' => 'Realizada paga',
+                        'Realizada Não Paga' => 'Realizada n o paga',
+                        'Cancelada' => 'Cancelada',
+                    ])
+                    ->placeholder('Status')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
@@ -116,15 +144,6 @@ class AppointmentResource extends Resource
                         'md' => 12,
                         'lg' => 12,
                     ]),
-
-                DatePicker::make('date')
-                    ->rules(['required', 'date'])
-                    ->placeholder('Date')
-                    ->columnSpan([
-                        'default' => 12,
-                        'md' => 12,
-                        'lg' => 12,
-                    ]),
             ]),
         ]);
     }
@@ -135,14 +154,20 @@ class AppointmentResource extends Resource
             ->columns([
                 Tables\Columns::make('start_time'),
                 Tables\Columns::make('end_time'),
+                Tables\Columns\TextColumn::make('date')->date(),
                 Tables\Columns\TextColumn::make('uuid')->limit(50),
                 Tables\Columns\TextColumn::make('token')->limit(50),
+                Tables\Columns\TextColumn::make('status')->enum([
+                    'Agendada' => 'Agendada',
+                    'Realizada Paga' => 'Realizada paga',
+                    'Realizada Não Paga' => 'Realizada n o paga',
+                    'Cancelada' => 'Cancelada',
+                ]),
                 Tables\Columns\TextColumn::make('cancelled_at')->date(),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50),
                 Tables\Columns\TextColumn::make('schedule.date')->limit(50),
                 Tables\Columns\TextColumn::make('service.name')->limit(50),
                 Tables\Columns\TextColumn::make('user.name')->limit(50),
-                Tables\Columns\TextColumn::make('date')->date(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')

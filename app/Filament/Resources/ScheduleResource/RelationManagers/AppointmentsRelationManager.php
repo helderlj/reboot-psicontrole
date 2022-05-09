@@ -3,10 +3,12 @@
 namespace App\Filament\Resources\ScheduleResource\RelationManagers;
 
 use App\Forms\Components\AvailabilitySlotPicker;
+use App\Models\Appointment;
 use App\Models\Service;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\ViewField;
 use Filament\Tables;
@@ -41,20 +43,11 @@ class AppointmentsRelationManager extends HasManyRelationManager
                     ->relationship('service', 'name')
                     ->placeholder('Selecione')
                     ->reactive()
-//                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
-//                        $serviceDuration = Service::find($state)->duration;
-//                        $inicio = $get('start_time');
-//                        $set('end_time', ((Carbon::createFromTimestamp($inicio))->addMinute($serviceDuration))->format('h:i') );
-//                        $set('selected_service_id', $state);
-//                    })
                     ->columnSpan([
                         'default' => 6,
                         'md' => 6,
                         'lg' => 6,
                     ]),
-
-                Hidden::make('end_time'),
-
 
                 BelongsToSelect::make('patient_id')
                     ->label('Paciente')
@@ -66,8 +59,6 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'md' => 6,
                         'lg' => 6,
                     ]),
-
-                Hidden::make('selected_service_id'),
 
                 AvailabilitySlotPicker::make('start_time')
                     ->view('forms.components.availability-slot-picker')
@@ -83,6 +74,14 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'lg' => 12,
                     ]),
 
+                Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'review' => 'In review',
+                        'published' => 'Published',
+                    ])
+
             ]),
         ]);
     }
@@ -93,6 +92,7 @@ class AppointmentsRelationManager extends HasManyRelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('start_time')->date('H:i')->label('Hora Inicio'),
                 Tables\Columns\TextColumn::make('end_time')->date('H:i')->label('Hora Fim'),
+                Tables\Columns\TextColumn::make('status')->label('Status'),
                 Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Terapeuta'),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50)->label('Paciente'),
                 Tables\Columns\TextColumn::make('service.name')->limit(50)->label('Serviço Agendado'),

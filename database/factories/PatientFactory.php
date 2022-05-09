@@ -31,6 +31,11 @@ class PatientFactory extends Factory
             'starting_date' => $this->faker->date,
             'is_active' => $this->faker->boolean,
             'summary' => $this->faker->text,
+            'fee' => $this->faker->randomNumber(0),
+            'frequency' => array_rand(
+                array_flip(['semanal', 'quinzenal', 'mensal']),
+                1
+            ),
             'user_id' => \App\Models\User::factory(),
         ];
     }

@@ -25,9 +25,10 @@ class AppointmentFactory extends Factory
         return [
             'start_time' => $this->faker->time,
             'end_time' => $this->faker->time,
+            'date' => $this->faker->date,
             'uuid' => $this->faker->uuid,
             'token' => $this->faker->text(255),
-            'date' => $this->faker->date,
+            'status' => 'Agendada',
             'patient_id' => \App\Models\Patient::factory(),
             'schedule_id' => \App\Models\Schedule::factory(),
             'service_id' => \App\Models\Service::factory(),

@@ -22,6 +22,10 @@ return new class extends Migration {
             $table->date('starting_date');
             $table->boolean('is_active');
             $table->mediumText('summary')->nullable();
+            $table->integer('fee')->nullable();
+            $table
+                ->enum('frequency', ['semanal', 'quinzenal', 'mensal'])
+                ->nullable();
             $table->unsignedBigInteger('user_id');
 
             $table->timestamps();

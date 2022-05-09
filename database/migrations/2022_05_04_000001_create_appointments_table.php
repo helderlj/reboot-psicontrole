@@ -16,14 +16,20 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->time('start_time');
             $table->time('end_time');
+            $table->date('date');
             $table->uuid('uuid');
             $table->string('token');
+            $table->enum('status', [
+                'Agendada',
+                'Realizada Paga',
+                'Realizada Não Paga',
+                'Cancelada',
+            ]);
             $table->timestamp('cancelled_at')->nullable();
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('user_id');
-            $table->date('date');
 
             $table->timestamps();
         });
