@@ -28,7 +28,7 @@ class AppointmentFactory extends Factory
             'date' => $this->faker->date,
             'uuid' => $this->faker->uuid,
             'token' => $this->faker->text(255),
-            'status' => 'Agendada',
+            'status' => 'agendada',
             'patient_id' => \App\Models\Patient::factory(),
             'schedule_id' => \App\Models\Schedule::factory(),
             'service_id' => \App\Models\Service::factory(),

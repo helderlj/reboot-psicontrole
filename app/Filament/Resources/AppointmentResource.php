@@ -76,14 +76,14 @@ class AppointmentResource extends Resource
                 Select::make('status')
                     ->rules([
                         'required',
-                        'in:agendada,realizada paga,realizada não paga,cancelada',
+                        'in:agendada,realizada_paga,realizada_nao_paga,cancelada',
                     ])
                     ->searchable()
                     ->options([
-                        'Agendada' => 'Agendada',
-                        'Realizada Paga' => 'Realizada paga',
-                        'Realizada Não Paga' => 'Realizada n o paga',
-                        'Cancelada' => 'Cancelada',
+                        'agendada' => 'Agendada',
+                        'realizada_paga' => 'Realizada paga',
+                        'realizada_nao_paga' => 'Realizada não paga',
+                        'cancelada' => 'Cancelada',
                     ])
                     ->placeholder('Status')
                     ->columnSpan([
@@ -158,10 +158,10 @@ class AppointmentResource extends Resource
                 Tables\Columns\TextColumn::make('uuid')->limit(50),
                 Tables\Columns\TextColumn::make('token')->limit(50),
                 Tables\Columns\TextColumn::make('status')->enum([
-                    'Agendada' => 'Agendada',
-                    'Realizada Paga' => 'Realizada paga',
-                    'Realizada Não Paga' => 'Realizada n o paga',
-                    'Cancelada' => 'Cancelada',
+                    'agendada' => 'Agendada',
+                    'realizada_paga' => 'Realizada paga',
+                    'realizada_nao_paga' => 'Realizada não paga',
+                    'cancelada' => 'Cancelada',
                 ]),
                 Tables\Columns\TextColumn::make('cancelled_at')->date(),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50),

@@ -20,10 +20,10 @@ return new class extends Migration {
             $table->uuid('uuid');
             $table->string('token');
             $table->enum('status', [
-                'Agendada',
-                'Realizada Paga',
-                'Realizada Não Paga',
-                'Cancelada',
+                'agendada',
+                'realizada_paga',
+                'realizada_nao_paga',
+                'cancelada',
             ]);
             $table->timestamp('cancelled_at')->nullable();
             $table->unsignedBigInteger('patient_id');
