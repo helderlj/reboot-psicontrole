@@ -7,6 +7,7 @@ use App\Bookings\Filters\SlotsPassedTodayFilter;
 use App\Bookings\Filters\UnavailabilityFilter;
 use App\Bookings\TimeSlotGenerator;
 use Carbon\Carbon;
+use Filament\Models\Contracts\FilamentUser;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Scopes\Searchable;
 use Laravel\Jetstream\HasProfilePhoto;
