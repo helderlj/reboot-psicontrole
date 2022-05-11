@@ -75,12 +75,20 @@ class AppointmentsRelationManager extends HasManyRelationManager
                     ]),
 
                 Select::make('status')
-                    ->label('Status')
+                    ->rules(['required', 'in:Agendada,Realizada Paga,Realizada Não Paga,Cancelada'])
                     ->options([
-                        'draft' => 'Draft',
-                        'review' => 'In review',
-                        'published' => 'Published',
+                        'Agendada' => 'Agendada',
+                        'Realizada Paga' => 'Realizada paga',
+                        'Realizada Não Paga' => 'Realizada não paga',
+                        'Cancelada' => 'Cancelada',
                     ])
+                    ->placeholder('Selecione')
+                    ->columnSpan([
+                        'default' => 12,
+                        'md' => 12,
+                        'lg' => 12,
+                    ]),
+
 
             ]),
         ]);
@@ -92,7 +100,16 @@ class AppointmentsRelationManager extends HasManyRelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('start_time')->date('H:i')->label('Hora Inicio'),
                 Tables\Columns\TextColumn::make('end_time')->date('H:i')->label('Hora Fim'),
-                Tables\Columns\TextColumn::make('status')->label('Status'),
+//                Tables\Columns\TextColumn::make('status')->label('Status'),
+
+                Tables\Columns\BadgeColumn::make('status')
+                    ->colors([
+                        'secondary',
+                        'danger' => 'Cancelada',
+                        'warning' => 'Realizada Não Paga',
+                        'success' => 'Realizada paga',
+                    ]),
+
                 Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Terapeuta'),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50)->label('Paciente'),
                 Tables\Columns\TextColumn::make('service.name')->limit(50)->label('Serviço Agendado'),

@@ -15,7 +15,11 @@
         "laravel/jetstream": "^2.3",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
-        "livewire/livewire": "^2.0"
+        "livewire/livewire": "^2.0",
+        "psr/simple-cache": "^1.0",
+        "pxlrbt/filament-excel": "^0.1.2",
+        "pxlrbt/filament-spotlight": "^0.3.2",
+        "saade/filament-fullcalendar": "^0.2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

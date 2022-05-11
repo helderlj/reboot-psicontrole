@@ -34,7 +34,7 @@ class PatientResource extends Resource
                 TextInput::make('name')
                     ->label('Nome')
                     ->rules(['required', 'max:255', 'string'])
-                    ->placeholder('Name')
+                    ->placeholder('Nome')
                     ->columnSpan([
                         'default' => 6,
                         'md' => 6,
@@ -76,7 +76,7 @@ class PatientResource extends Resource
                 DatePicker::make('birthday')
                     ->label('Aniversário')
                     ->rules(['required', 'date'])
-                    ->placeholder('Birthday')
+                    ->placeholder('Aniversário')
                     ->columnSpan([
                         'default' => 3,
                         'md' => 3,
@@ -86,7 +86,7 @@ class PatientResource extends Resource
                 DatePicker::make('starting_date')
                     ->label('Data de Inicio')
                     ->rules(['required', 'date'])
-                    ->placeholder('Starting Date')
+                    ->placeholder('Data de Inicio')
                     ->columnSpan([
                         'default' => 3,
                         'md' => 3,
@@ -96,6 +96,7 @@ class PatientResource extends Resource
                 Toggle::make('is_active')
                     ->label('Ativo')
                     ->rules(['required', 'boolean'])
+                    ->default(true)
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
@@ -105,7 +106,7 @@ class PatientResource extends Resource
                 RichEditor::make('summary')
                     ->label('Demanda Inicial')
                     ->rules(['nullable', 'max:2048'])
-                    ->placeholder('Summary')
+                    ->placeholder('Descreva a demanda inicial do paciente')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,

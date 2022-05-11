@@ -33,7 +33,7 @@ class ScheduleResource extends Resource
                     ->label('Terapeuta')
                     ->rules(['required', 'exists:users,id'])
                     ->relationship('user', 'name')
-                    ->placeholder('User')
+                    ->placeholder('Terapeuta')
                     ->default(Auth::id())
                     ->disabled(! auth()->user()->isSuperAdmin())
                     ->columnSpan([
@@ -45,7 +45,8 @@ class ScheduleResource extends Resource
                 DatePicker::make('date')
                     ->label('Data')
                     ->rules(['required', 'date'])
-                    ->placeholder('Date')
+                    ->placeholder('Data')
+                    ->displayFormat('d M, Y')
                     ->minDate(now())
                     ->default(now())
                     ->columnSpan([
@@ -57,7 +58,7 @@ class ScheduleResource extends Resource
                 TimePicker::make('start_time')
                     ->label('Inicio')
                     ->rules(['required', 'date_format:H:i'])
-                    ->placeholder('Start Time')
+                    ->placeholder('Hora Inicio')
                     ->withoutSeconds()
                     ->format('H:i')
                     ->default('08:00')
@@ -70,7 +71,7 @@ class ScheduleResource extends Resource
                 TimePicker::make('end_time')
                     ->label('Fim')
                     ->rules(['required', 'date_format:H:i'])
-                    ->placeholder('End Time')
+                    ->placeholder('Hora Inicio')
                     ->withoutSeconds()
                     ->default('18:00')
                     ->columnSpan([

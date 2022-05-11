@@ -3,12 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Models\User;
-use Filament\{Tables, Forms};
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Filament\{Forms\Components\FileUpload, Tables, Forms, Tables\Actions\BulkAction, Tables\Actions\ButtonAction};
 use Filament\Resources\{Form, Table, Resource};
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
+use Maatwebsite\Excel\Excel;
+use pxlrbt\FilamentExcel\Actions\ExportAction;
+
 
 class UserResource extends Resource
 {
@@ -95,7 +100,54 @@ class UserResource extends Resource
                                 )
                             );
                     }),
-            ]);
+            ])
+            ->bulkActions([
+                ExportAction::make('export')
+                    ->label('Exportar Selecionados')
+                    ->icon('heroicon-o-download')
+                    ->color('success')
+                    ->withHeadings()
+                    ->withWriterType(Excel::CSV),
+                BulkAction::make('delete')
+                    ->label('Deletar Selecionados')
+                    ->action(fn(Collection $records) => $records->each->delete())
+                    ->deselectRecordsAfterCompletion()
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->icon('heroicon-o-trash'),
+            ])
+            ->headerActions([
+                ButtonAction::make('create')
+                    ->form([
+                        FileUpload::make("name")
+                            ->label("Arquivo CSV")
+                            ->required(),
+                        Forms\Components\Toggle::make('header')
+                            ->label("Tem cabeçalho")
+                    ])
+                    ->label("Importar CSV")
+                    ->action(function ($data) {
+                        $users = [];
+                        if (($open = fopen(asset('storage') . "/" . $data['name'], "r")) !== FALSE) {
+                            while (($rows = fgetcsv($open, 1000, ",")) !== FALSE) {
+                                $users[] = $rows;
+                            }
+                            fclose($open);
+                        }
+                        for ($i = 0; $i < count($users); $i++) {
+                            if ($data['header']) {
+                                if($i == 0) {
+                                    $i++;
+                                }
+                            }
+                            User::updateOrCreate([
+                                'name' => $users[$i][0],
+                                'email' => $users[$i][1],
+                                'password' => Hash::make('password')
+                            ]);
+                        }
+                    })
+            ]);;
     }
 
     public static function getRelations(): array
