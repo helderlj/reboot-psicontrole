@@ -30,7 +30,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('schedule_id');
             $table->unsignedBigInteger('service_id');
             $table->unsignedBigInteger('user_id');
-
+            $table->mediumText('hightlights')->nullable();
+            $table->enum('nature', ['presencial', 'online']);
             $table->timestamps();
         });
     }

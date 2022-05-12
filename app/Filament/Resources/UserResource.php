@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Filament\{Forms\Components\FileUpload, Tables, Forms, Tables\Actions\BulkAction, Tables\Actions\ButtonAction};
@@ -23,6 +24,8 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $label = 'Usuários / Terapeutas';
+
     protected static ?string $navigationGroup = 'Root';
 
     public static function form(Form $form): Form
@@ -39,7 +42,8 @@ class UserResource extends Resource
                     ]),
 
                 TextInput::make('email')
-                    ->rules(['required', 'unique:users,email', 'email'])
+                    ->rules(['required', 'email'])
+                    ->unique(ignorable: fn(?Model $record): ?Model => $record)
                     ->email()
                     ->placeholder('Email')
                     ->columnSpan([

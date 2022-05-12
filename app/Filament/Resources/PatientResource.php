@@ -113,6 +113,30 @@ class PatientResource extends Resource
                         'lg' => 12,
                     ]),
 
+                TextInput::make('fee')
+                    ->label('Valor da Sessão')
+                    ->mask(fn (TextInput\Mask $mask) => $mask->money('R$', ',', 2))
+                    ->columnSpan([
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
+                Select::make('frequency')
+                    ->label('Frequencia')
+                    ->rules(['nullable', 'in:semanal,quinzenal,mensal'])
+                    ->options([
+                        'semanal' => 'Semanal',
+                        'quinzenal' => 'Quinzenal',
+                        'mensal' => 'Mensal',
+                    ])
+                    ->placeholder('Frequencia')
+                    ->columnSpan([
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
                 BelongsToSelect::make('user_id')
                     ->label('Terapeuta')
                     ->rules(['required', 'exists:users,id'])
@@ -134,6 +158,7 @@ class PatientResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Nome')->limit(50)->sortable(),
+                Tables\Columns\TextColumn::make('fee')->label('Valor Sessão')->money('brl', true)->sortable(),
 //                Tables\Columns\TextColumn::make('email')->limit(50),
                 Tables\Columns\TextColumn::make('phone')->label('Tel.')->limit(50),
 //                Tables\Columns\TextColumn::make('birthday')->label('Data de Nasc.')->date('d/m/Y')->sortable(),

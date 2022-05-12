@@ -31,7 +31,7 @@ class PatientFactory extends Factory
             'starting_date' => $this->faker->date,
             'is_active' => $this->faker->boolean,
             'summary' => $this->faker->text,
-            'fee' => $this->faker->randomNumber(0),
+            'fee' => $this->faker->randomNumber(2),
             'frequency' => array_rand(
                 array_flip(['semanal', 'quinzenal', 'mensal']),
                 1

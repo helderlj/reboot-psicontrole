@@ -8,6 +8,7 @@ use App\Models\Service;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\ViewField;
@@ -60,6 +61,41 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'lg' => 6,
                     ]),
 
+                Select::make('status')
+                    ->rules([
+                        'required',
+                        'in:agendada,realizada_paga,realizada_nao_paga,cancelada',
+                    ])
+                    ->searchable()
+                    ->options([
+                        'agendada' => 'Agendada',
+                        'realizada_paga' => 'Realizada paga',
+                        'realizada_nao_paga' => 'Realizada não paga',
+                        'cancelada' => 'Cancelada',
+                    ])
+                    ->default('agendada')
+                    ->placeholder('Status')
+                    ->columnSpan([
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
+                Select::make('nature')
+                    ->label('Modalidade')
+                    ->rules(['required', 'in:presencial,online'])
+                    ->searchable()
+                    ->options([
+                        'presencial' => 'Presencial',
+                        'online' => 'Online',
+                    ])
+                    ->placeholder('Nature')
+                    ->columnSpan([
+                        'default' => 6,
+                        'md' => 6,
+                        'lg' => 6,
+                    ]),
+
                 AvailabilitySlotPicker::make('start_time')
                     ->view('forms.components.availability-slot-picker')
                     ->boot()
@@ -74,21 +110,15 @@ class AppointmentsRelationManager extends HasManyRelationManager
                         'lg' => 12,
                     ]),
 
-                Select::make('status')
-                    ->rules(['required', 'in:Agendada,Realizada Paga,Realizada Não Paga,Cancelada'])
-                    ->options([
-                        'Agendada' => 'Agendada',
-                        'Realizada Paga' => 'Realizada paga',
-                        'Realizada Não Paga' => 'Realizada não paga',
-                        'Cancelada' => 'Cancelada',
-                    ])
-                    ->placeholder('Selecione')
+                RichEditor::make('hightlights')
+                    ->label('Anotações')
+                    ->rules(['nullable', 'max:255', 'string'])
+                    ->placeholder('Anotações')
                     ->columnSpan([
                         'default' => 12,
                         'md' => 12,
                         'lg' => 12,
                     ]),
-
 
             ]),
         ]);
@@ -103,17 +133,32 @@ class AppointmentsRelationManager extends HasManyRelationManager
 //                Tables\Columns\TextColumn::make('status')->label('Status'),
 
                 Tables\Columns\BadgeColumn::make('status')
+                    ->enum([
+                        'agendada' => 'Agendada',
+                        'realizada_paga' => 'Realizada paga',
+                        'realizada_nao_paga' => 'Realizada não paga',
+                        'cancelada' => 'Cancelada',
+                    ])
                     ->colors([
-                        'secondary',
-                        'danger' => 'Cancelada',
-                        'warning' => 'Realizada Não Paga',
-                        'success' => 'Realizada paga',
+                        'secondary' => 'agendada',
+                        'success' => 'realizada_paga',
+                        'warning' => 'realizada_nao_paga',
+                        'danger' => 'cancelada',
                     ]),
 
-                Tables\Columns\TextColumn::make('user.name')->limit(50)->label('Terapeuta'),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->limit(50)
+                    ->label('Terapeuta')
+                    ->visible(auth()->user()->isSuperAdmin()),
                 Tables\Columns\TextColumn::make('patient.name')->limit(50)->label('Paciente'),
                 Tables\Columns\TextColumn::make('service.name')->limit(50)->label('Serviço Agendado'),
-                Tables\Columns\TextColumn::make('service.duration')->limit(50)->label('Duração (minutos)'),
+//                Tables\Columns\TextColumn::make('service.duration')->limit(50)->label('Duração (minutos)'),
+                Tables\Columns\TextColumn::make('nature')
+                    ->label('Modalidade')
+                    ->enum([
+                        'presencial' => 'Presencial',
+                        'online' => 'Online',
+                    ]),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')

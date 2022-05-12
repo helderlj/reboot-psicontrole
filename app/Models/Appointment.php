@@ -28,6 +28,8 @@ class Appointment extends Model
         'patient_id',
         'schedule_id',
         'service_id',
+        'hightlights',
+        'nature',
     ];
 
     protected $searchableFields = ['*'];

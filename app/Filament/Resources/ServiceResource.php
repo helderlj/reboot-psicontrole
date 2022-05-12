@@ -60,7 +60,7 @@ class ServiceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('Serviço')->limit(50),
-                Tables\Columns\TextColumn::make('duration')->label('Duração'),
+                Tables\Columns\TextColumn::make('duration')->label('Duração (minutos)'),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
